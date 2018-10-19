@@ -22,21 +22,9 @@ func_dicts = {
 
 def get_OpenPorts(c,t):
     port_dict = {20:'FTP (default data channel)',
-        21:'FTP (control channel)',
-        23:'Telnet',
-        43:'Whois',
-        53:'Domain Name System',
-        67:'Bootp server',
-        68:'Bootp client',
-        69:'Trivial FTP',
-        70:'Gopher',
-        80:'HYPERTEXT TRANSFER PROTOCOL',
-        88:'Kerberos',
-        109:'POP-2 (Post Office Protocol)',
-        110:'POP-3',
-        119:'NNTP (Network News Transfer Protocol)',
-        123:'NTP (Network Time Protocol)',
-        135:'NT RPC endpoint mapper',
+        21:'FTP (control channel)',23:'Telnet',43:'Whois',53:'Domain Name System',67:'Bootp server',68:'Bootp client',69:'Trivial FTP',70:'Gopher',
+        80:'HYPERTEXT TRANSFER PROTOCOL',88:'Kerberos',109:'POP-2 (Post Office Protocol)',110:'POP-3',119:'NNTP (Network News Transfer Protocol)',
+        123:'NTP (Network Time Protocol)',135:'NT RPC endpoint mapper',
         137:'NetBIOS Name Service',
         138:'NetBIOS Datagram Service',
         139:'NetBIOS Session Service',
@@ -73,18 +61,8 @@ def get_OpenPorts(c,t):
         1270:'Microsoft Operations Manager (MOM)',
         1433:'Microsoft SQL Server',
         1434:'Microsoft SQL Monitor service',
-        1494:'Citrix',
-        1498:'Sybase',
-        1521:'Oracle TNS Listener',
-        1723:'Point-to-Point Tunneling Protocol (PPTP)',
-        1745:'Winsock-proxy',
-        2000:'Remotely Anywhere',
-        2001:'Cisco device management, Remotely Anywhere',
-        2301:'Compaq Insight Manager',
-        2381:'Secure Compaq Insight Manager',
-        3389:'Terminal Services',
-        4001:'Cisco device management',
-        5631:'PC Anywhere'}
+        1494:'Citrix',1498:'Sybase', 1521:'Oracle TNS Listener',1723:'Point-to-Point Tunneling Protocol (PPTP)',1745:'Winsock-proxy',2000:'Remotely Anywhere',
+        2001:'Cisco device management, Remotely Anywhere',2301:'Compaq Insight Manager', 2381:'Secure Compaq Insight Manager',3389:'Terminal Services',4001:'Cisco device management', 5631:'PC Anywhere'}
     port_len = len(port_dict)
     ports_range  = list(port_dict.keys())
     
