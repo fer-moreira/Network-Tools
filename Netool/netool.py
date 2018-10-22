@@ -1,3 +1,5 @@
+# C:\Users\fernandomoreira\AppData\Local\Programs\Python\Python37-32\python.exe C:\Users\fernandomoreira\Documents\Python\Projects\argparser\app.py -h
+
 import argparse
 from argparse import RawTextHelpFormatter
 from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
@@ -15,10 +17,11 @@ func_dicts = {
     'Links':"get_Links",
     'Robots':'get_Robots',
     'Dorks':'get_Dorks',
-    'Scrap':'get_Sources'
+    'Scrap':'get_Sources',
+    'Sitemap':'get_SitemapXML'
 }
 
-def get_OpenPorts(c,t):
+def get_OpenPorts(c,t,m): # --------------------------------------------- OPEN PORTS -----------------------------------------------
     port_dict = {
         20:'FTP (default data channel)',    21:'FTP (control channel)',                         23:'Telnet',
         43:'Whois',                         53:'Domain Name System',                            67:'Bootp server',
@@ -43,10 +46,10 @@ def get_OpenPorts(c,t):
         2381:'Secure Cpq Insight Manager',  3389:'Terminal Services',                           4001:'Cisco device management', 
         5631:'PC Anywhere'
         }
-        
+
     port_len = len(port_dict)
-    ports_range  = list(port_dict.keys())
-    
+    ports_range  = list(port_dict.keys())    
+
     try:
         _adress = str(c)
         _timeout = int(t)
@@ -74,7 +77,8 @@ def get_OpenPorts(c,t):
         print("done: 1 IP address ({0}) scanned in {1}".format(ip,finalTime))
     except Exception as error:
         print(error,"critical")
-def get_Links (c,t,max):
+
+def get_Links (c,t,max): # -------------------------------------------- LINKS -----------------------------------------------
     _adress = str(c)
     url = str(_adress)
 
@@ -95,7 +99,8 @@ def get_Links (c,t,max):
             print(f_link)
     except Exception as error:
         print("{0}\nFile: {1}".format(error,os.path.basename(__file__)),"critical")
-def get_Robots (c,t,max):
+        
+def get_Robots (c,t,max): # ------------------------------------------- ROBOTS -----------------------------------------------
     http=True
     https=True
     wtp=True
@@ -124,26 +129,23 @@ def get_Robots (c,t,max):
             rContent = r.text
         except Exception as error:
             https=False
-        
+
+        print("-"*100)
         print(rContent)
+        print("-"*100)
 
     except Exception as error:
         print(error)
 
-    print('''\n
-Following with [True] 
-You can visualize '/robots.txt' 
 
-Following with [False]
-You don't have permission to access /robots.txt on this server.
 
-Robots open with following protocols
+    print('''\nRobots open with following protocols
 http://{site}       → {0}
 https://{site}      → {1}
 {site}              → {2}
-    '''.format(http,https,wtp,site=adress))
+'''.format(http,https,wtp,site=adress))
 
-def get_Dorks (c,t,max):
+def get_Dorks (c,t,max): # -------------------------------------------- DORKS ----------------------------------------------------
     text = str(c)
     print("Searching {m} results for '{0}'.. \nmaybe this take a bit longer to complete".format(text,m=max),"alert")
     links = []
@@ -161,43 +163,122 @@ def get_Dorks (c,t,max):
             print(i)
         print("done!! {0} links found".format(maxLinks))
 
-def get_Sources (c,t,max):
-    print(".HTML FILE IN STRING")
+def get_Sources (c,t,max): # ------------------------------------------ SOURCE CODE (SCRAP) ----------------------------------------------
+    print(c)
+    _adress = str(c)
+    url = str(_adress)
+    r = ""
+
+    try:
+        try:    r = requests.get(url)
+        except: pass
+        try:    r = requests.get("http://{0}".format(url))
+        except: pass                
+        try:    r = requests.get("https://{0}".format(url))
+        except: pass
+    except Exception as error:
+        print("{0}\n\nFile: {1}".format(error,os.path.basename(__file__)),"critical")
+    
+    data = r.text
+    print("\n\n{0}\n\n".format(data))
+
+
+def getRequests (c): # ------------ SUB FUNCTION FOR XMLMAP 2
+    try:
+        get_url = requests.get(str("http://{0}/sitemap.xml".format(c)))
+        return get_url    
+    except:pass
+    try:
+        get_url = requests.get(str("https://{0}/sitemap.xml".format(c)))
+        return get_url 
+    except:pass
+    try:
+        get_url = requests.get("{0}/sitemap.xml".format(c))
+        return get_url
+    except:pass
+def xmlMapString (c): # ------------- SUB FUNCTION XMLMAP 1
+    try:
+        get_url = getRequests(c)
+
+        if get_url.status_code == 200:
+            return get_url.text
+        else:
+            print("Unable to fetch sitemap: %s ." % c)
+
+    except Exception as error:
+        print(error)
+
+def processSitemap (c):
+    sitemapText = xmlMapString(c)
+    soup = BeautifulSoup(sitemapText,'lxml')
+    results = []
+
+    for loc in soup.find_all('loc'):
+        results.append(loc.text)
+    return results
+
+def get_SitemapXML (c,t,max):#------------------------------------------ SITEMAP XML ---------------------------------------------------
+    print("Trying to request '/sitemap.xlm' wait until process complete.")
+    sitemapLinks = processSitemap(c)
+    lines = 0
+    
+    for l in range(len(sitemapLinks)):
+        print(sitemapLinks[l])
+        lines = lines+1
+    print("done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
+
 
 if __name__ == "__main__":
+ # APP DESCRIP AND EPILOG
+    desc = '''
+[!] legal disclaimer: 
+Use of this program to cause problems to third parties is not permited by developer, educational purposees only
+I do not assume any liability for damages caused by this program
 
-# APP DESCRIP AND EPILOG
-    desc = ''' The software provides a number of features for probing computer networks, 
- including host discovery and operating-system detection. These features 
- are extensible by scripts that provide more advanced service detection,
- vulnerability detection, and other features. '''
+[?] This software provides a number of features for probing computer networks, 
+including host discovery and operating-system detection. These features 
+are extensible by one simple script that provide more advanced service detection,
+vulnerability detection, and million others features. '''
 
     epilog = '''Main Functions
-  - Ports     Check for open ports in specific site             [-f Ports -in www.site.com -t 1]
-  - Links     Craw and return all href links                    [-f Links -in www.site.com ]
-  - Robots    Acess site's/robots.txt and return content        [-f Robots -in www.site.com]
-  - Dorks     Search for vulnerable dorks with google hacking   [-f Dorks -in inurl='cart.php?id=1' -max 1] [max links]
-  - Scrap     Scrap site's SourceCode                           [-f Scrap -in www.site.com]
+   - Ports     Check for open ports in specific site             [-f Ports      -in www.site.com -t 1]
+   - Links     Craw and return all href links                    [-f Links      -in www.site.com ]
+   - Robots    Acess site's/robots.txt and return content        [-f Robots     -in www.site.com]
+   - Dorks     Search for vulnerable dorks with google hacking   [-f Dorks      -in inurl='cart.php?id=1' -max 1]
+   - Scrap     Scrap site's SourceCode                           [-f Scrap      -in www.site.com]
+   - Sitemap   Scrap sitemap.xml Code and return all links       [-f Sitemap    -in www.site.com]
     '''
 
-# PARSER __init__ PROGRAM
-    parser = argparse.ArgumentParser(description=desc,epilog=epilog,formatter_class=RawTextHelpFormatter)
-    
-    parser._optionals.title = " arguments"
-    parser.add_argument('-f',   default='None', nargs='?', help=' use this argument follow by function     [-f function]',      dest='Function')
-    parser.add_argument('-in',  default='None', nargs='?', help=' use this argument follow by content      [-in adress]',       dest='Content')
-    parser.add_argument('-t',   default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',dest='Timeout')
-    parser.add_argument('-max', default=1,      nargs='?', help=' Set an maximum value                     [-m 1, default = 1]',dest='Max')
-    
-    args = parser.parse_args()
+    usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
 
-    arg_func=func_dicts[str(args.Function)]
-    c = args.Content
-    t = args.Timeout
-    max = args.Max
-
-    print("\nAcessing {0} > {1} > {2} > {3}\n".format(arg_func,c,t,max))
+ # PARSER __init__ PROGRAM
     try:
+        parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
+        
+        parser._optionals.title = " arguments"
+
+        parser.add_argument('-f',"--function",  default='None', nargs='?', help=' use this argument follow by function     [-f function]',      dest='Function')
+        parser.add_argument('-in',"--target",   default='None', nargs='?', help=' use this argument follow by content      [-in adress]',       dest='Content')
+        parser.add_argument('-t',"--timeout",   default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',dest='Timeout')
+        parser.add_argument('-max',             default=1,      nargs='?', help=' Set an maximum value                     [-m 1, default = 1]',dest='Max')
+        
+        args = parser.parse_args()
+
+        arg_func=func_dicts[str(args.Function)]
+        c = args.Content
+        t = args.Timeout
+        max = args.Max
+
+        h = datetime.now()
+
+
+        st = strftime("%H:%M:%S")
+        print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
+        
         f = globals()[arg_func](c,t,max)
+
+        ct = strftime("%H:%M:%S")
+        print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
+
     except Exception as error:
-        print(error,"NULL")
+        print(error,"empty function selection")
