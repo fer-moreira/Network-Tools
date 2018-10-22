@@ -1,5 +1,3 @@
-# C:\Users\fernandomoreira\AppData\Local\Programs\Python\Python37-32\python.exe C:\Users\fernandomoreira\Documents\Python\Projects\argparser\app.py -h
-
 import argparse
 from argparse import RawTextHelpFormatter
 from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
@@ -21,48 +19,31 @@ func_dicts = {
 }
 
 def get_OpenPorts(c,t):
-    port_dict = {20:'FTP (default data channel)',
-        21:'FTP (control channel)',23:'Telnet',43:'Whois',53:'Domain Name System',67:'Bootp server',68:'Bootp client',69:'Trivial FTP',70:'Gopher',
-        80:'HYPERTEXT TRANSFER PROTOCOL',88:'Kerberos',109:'POP-2 (Post Office Protocol)',110:'POP-3',119:'NNTP (Network News Transfer Protocol)',
-        123:'NTP (Network Time Protocol)',135:'NT RPC endpoint mapper',
-        137:'NetBIOS Name Service',
-        138:'NetBIOS Datagram Service',
-        139:'NetBIOS Session Service',
-        143:'IMAP (Internet Message Access Protocol)',
-        161:'SNMP',
-        162:'SNMP Trap',
-        179:'BGP (Border Gateway Protocol)',
-        194:'IRC (Internet Relay Chat)',
-        216:'Computer Associates License Server',
-        256:'Checkpoint Firewall Management',
-        257:'Checkpoint Firewall Log Management',
-        258:'Checkpoint Firewall Management',
-        259:'Checkpoint VPN-1 FWZ Key Management',
-        260:'Checkpoint Alternate SNMP',
-        261:'Checkpoint Firewall Management',
-        264:'Checkpoint Firewall Topology Download',
-        265:'Checkpoint VPN-1 Public Key Transfer Protocol',
-        389:'LDAP (Lightweight Directory Access Protocol)',
-        443:'HTTP over SSL',
-        444:'SNPP (Simple Network Paging Protocol)',
-        445:'Microsoft Direct SMB',
-        464:'Kerberos Password',
-        500:'IKE (IPSEC Internet Key Exchange)',
-        520:'RIP (Routing Information Protocol)',
-        524:'Netware Core Protocol',
-        543:'Kerberos Login',
-        544:'Kerberos Shell',
-        563:'NNTPS (Secure NNTP)',
-        599:'HTTP RPC Endpoint Mapper',
-        1080:'SOCKS Proxy',
-        1081:'SOCKS Proxy alternate',
-        1214:'Kazaa Network',
-        1241:'Nessus',
-        1270:'Microsoft Operations Manager (MOM)',
-        1433:'Microsoft SQL Server',
-        1434:'Microsoft SQL Monitor service',
-        1494:'Citrix',1498:'Sybase', 1521:'Oracle TNS Listener',1723:'Point-to-Point Tunneling Protocol (PPTP)',1745:'Winsock-proxy',2000:'Remotely Anywhere',
-        2001:'Cisco device management, Remotely Anywhere',2301:'Compaq Insight Manager', 2381:'Secure Compaq Insight Manager',3389:'Terminal Services',4001:'Cisco device management', 5631:'PC Anywhere'}
+    port_dict = {
+        20:'FTP (default data channel)',    21:'FTP (control channel)',                         23:'Telnet',
+        43:'Whois',                         53:'Domain Name System',                            67:'Bootp server',
+        68:'Bootp client',                  69:'Trivial FTP',                                   70:'Gopher',                        
+        80:'HYPERTEXT TRANSFER PROTOCOL',   88:'Kerberos',                                      109:'POP-2 (Post Office Protocol)', 
+        110:'POP-3',                        119:'NNTP (Network News Transfer Protocol)',        123:'NTP (Network Time Protocol)',  
+        135:'NT RPC endpoint mapper',       137:'NetBIOS Name Service',                         138:'NetBIOS Datagram Service',     
+        139:'NetBIOS Session Service',      143:'IMAP (Internet Message Access Protocol)',      161:'SNMP',                         
+        162:'SNMP Trap',                    179:'BGP (Border Gateway Protocol)',                194:'IRC (Internet Relay Chat)',    
+        216:'Computer Associates License',  256:'Checkpoint Firewall Management',               257:'Checkpoint Firewall Log Management',
+        258:'CheckP Firewall Management',   259:'Checkpoint VPN-1 FWZ Key Management',          260:'Checkpoint Alternate SNMP',
+        261:'CheckP Firewall Management',   264:'Checkpoint Firewall Topology Download',        265:'Checkpoint VPN-1 Public Key Transfer Protocol',
+        270:'Microsoft Operations Manager ',389:'LDAP (Lightweight Directory Access Protocol)',
+        443:'HTTP over SSL',                444:'SNPP (Simple Network Paging Protocol)',        500:'IKE (IPSEC Internet Key Exchange)',
+        520:'Routing Information Protocol', 524:'Netware Core Protocol',                        543:'Kerberos Login',               
+        544:'Kerberos Shell',               563:'NNTPS (Secure NNTP)',                          599:'HTTP RPC Endpoint ',           
+        1080:'SOCKS Proxy',                 1081:'SOCKS Proxy alternate',                       1214:'Kazaa Network',               
+        1241:'Nessus',                      1433:'Microsoft SQL Server',                        1434:'Microsoft SQL MonitorService',
+        1494:'Citrix',                      1498:'Sybase',                                      1521:'Oracle TNS Listener', 
+        1723:'Point-to-Point Tunneling Protocol (PPTP)',                                        1745:'Winsock-proxy', 
+        2000:'Remotely Anywhere',           2001:'Cisco device management, Remotely Anywhere',  2301:'Compaq Insight Manager', 
+        2381:'Secure Cpq Insight Manager',  3389:'Terminal Services',                           4001:'Cisco device management', 
+        5631:'PC Anywhere'
+        }
+        
     port_len = len(port_dict)
     ports_range  = list(port_dict.keys())
     
