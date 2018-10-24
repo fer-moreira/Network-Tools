@@ -1,16 +1,17 @@
-# C:\Users\fernandomoreira\AppData\Local\Programs\Python\Python37-32\python.exe C:\Users\fernandomoreira\Documents\Python\Projects\argparser\app.py -h
+try:
+    import argparse
+    from argparse import RawTextHelpFormatter
+    from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
+    from datetime import datetime
+    from time import time, strftime,gmtime
 
-import argparse
-from argparse import RawTextHelpFormatter
-from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
-from datetime import datetime
-from time import time, strftime,gmtime
+    import requests,lxml
+    import os,sys
 
-import requests,lxml
-import os,sys
-
-from bs4 import BeautifulSoup
-from googlesearch import search
+    from bs4 import BeautifulSoup
+    from googlesearch import search
+except Exception as error:
+    print(error)
 
 func_dicts = {
     'Ports':'get_OpenPorts',
@@ -18,10 +19,10 @@ func_dicts = {
     'Robots':'get_Robots',
     'Dorks':'get_Dorks',
     'Scrap':'get_Sources',
-    'Sitemap':'get_SitemapXML'
-}
+    'Sitemap':'get_SitemapXML'}
 
-def get_OpenPorts(c,t,m): # --------------------------------------------- OPEN PORTS -----------------------------------------------
+#---------------------------------------------------------------------------------------------------
+def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]--------------------
     port_dict = {
         20:'FTP (default data channel)',    21:'FTP (control channel)',                         23:'Telnet',
         43:'Whois',                         53:'Domain Name System',                            67:'Bootp server',
@@ -34,11 +35,11 @@ def get_OpenPorts(c,t,m): # --------------------------------------------- OPEN P
         216:'Computer Associates License',  256:'Checkpoint Firewall Management',               257:'Checkpoint Firewall Log Management',
         258:'CheckP Firewall Management',   259:'Checkpoint VPN-1 FWZ Key Management',          260:'Checkpoint Alternate SNMP',
         261:'CheckP Firewall Management',   264:'Checkpoint Firewall Topology Download',        265:'Checkpoint VPN-1 Public Key Transfer Protocol',
-        270:'Microsoft Operations Manager ',389:'LDAP (Lightweight Directory Access Protocol)',
-        443:'HTTP over SSL',                444:'SNPP (Simple Network Paging Protocol)',        500:'IKE (IPSEC Internet Key Exchange)',
-        520:'Routing Information Protocol', 524:'Netware Core Protocol',                        543:'Kerberos Login',               
-        544:'Kerberos Shell',               563:'NNTPS (Secure NNTP)',                          599:'HTTP RPC Endpoint ',           
-        1080:'SOCKS Proxy',                 1081:'SOCKS Proxy alternate',                       1214:'Kazaa Network',               
+        270:'Microsoft Operations Manager ',389:'LDAP (Lightweight Directory Access Protocol)', 443:'HTTP over SSL',                
+        444:'SNPP(Network Paging Protocol)',500:'IKE (IPSEC Internet Key Exchange)',            520:'Routing Information Protocol', 
+        524:'Netware Core Protocol',        543:'Kerberos Login',               
+        544:'Kerberos Shell',               563:'NNTPS (Secure NNTP)',                          599:'HTTP RPC Endpoint ', 
+        1080:'SOCKS Proxy',                 1081:'SOCKS Proxy alternate',                       1214:'Kazaa Network', 
         1241:'Nessus',                      1433:'Microsoft SQL Server',                        1434:'Microsoft SQL MonitorService',
         1494:'Citrix',                      1498:'Sybase',                                      1521:'Oracle TNS Listener', 
         1723:'Point-to-Point Tunneling Protocol (PPTP)',                                        1745:'Winsock-proxy', 
@@ -51,6 +52,7 @@ def get_OpenPorts(c,t,m): # --------------------------------------------- OPEN P
     ports_range  = list(port_dict.keys())    
 
     try:
+
         _adress = str(c)
         _timeout = int(t)
         _range = ports_range
@@ -77,8 +79,7 @@ def get_OpenPorts(c,t,m): # --------------------------------------------- OPEN P
         print("done: 1 IP address ({0}) scanned in {1}".format(ip,finalTime))
     except Exception as error:
         print(error,"critical")
-
-def get_Links (c,t,max): # -------------------------------------------- LINKS -----------------------------------------------
+def get_Links (c,t,max): # ------------------------------[       LINKS         ]--------------------
     _adress = str(c)
     url = str(_adress)
 
@@ -98,9 +99,8 @@ def get_Links (c,t,max): # -------------------------------------------- LINKS --
             f_link = link.get('href')
             print(f_link)
     except Exception as error:
-        print("{0}\nFile: {1}".format(error,os.path.basename(__file__)),"critical")
-        
-def get_Robots (c,t,max): # ------------------------------------------- ROBOTS -----------------------------------------------
+        print("{0}\nFile: {1}".format(error,os.path.basename(__file__)),"critical")       
+def get_Robots (c,t,max): # -----------------------------[       ROBOTS        ]--------------------
     http=True
     https=True
     wtp=True
@@ -140,12 +140,10 @@ def get_Robots (c,t,max): # ------------------------------------------- ROBOTS -
 
 
     print('''\nRobots open with following protocols
-http://{site}       → {0}
-https://{site}      → {1}
-{site}              → {2}
-'''.format(http,https,wtp,site=adress))
-
-def get_Dorks (c,t,max): # -------------------------------------------- DORKS ----------------------------------------------------
+ http://{site}       → {0}
+ https://{site}      → {1}
+ {site}              → {2}'''.format(http,https,wtp,site=adress))
+def get_Dorks (c,t,max): # ------------------------------[       DORKS         ]--------------------
     text = str(c)
     print("Searching {m} results for '{0}'.. \nmaybe this take a bit longer to complete".format(text,m=max),"alert")
     links = []
@@ -162,8 +160,7 @@ def get_Dorks (c,t,max): # -------------------------------------------- DORKS --
         for i in links:
             print(i)
         print("done!! {0} links found".format(maxLinks))
-
-def get_Sources (c,t,max): # ------------------------------------------ SOURCE CODE (SCRAP) ----------------------------------------------
+def get_Sources (c,t,max): # ----------------------------[ SOURCE CODE (SCRAP) ]--------------------
     print(c)
     _adress = str(c)
     url = str(_adress)
@@ -181,9 +178,8 @@ def get_Sources (c,t,max): # ------------------------------------------ SOURCE C
     
     data = r.text
     print("\n\n{0}\n\n".format(data))
-
-
-def getRequests (c): # ------------ SUB FUNCTION FOR XMLMAP 2
+#---------------------------------------------------------------------------------------------------
+def getRequests (c):    # ---------- SUB FUNCTION XMLMAP 1 -----------
     try:
         get_url = requests.get(str("http://{0}/sitemap.xml".format(c)))
         return get_url    
@@ -196,7 +192,7 @@ def getRequests (c): # ------------ SUB FUNCTION FOR XMLMAP 2
         get_url = requests.get("{0}/sitemap.xml".format(c))
         return get_url
     except:pass
-def xmlMapString (c): # ------------- SUB FUNCTION XMLMAP 1
+def xmlMapString (c):   # ---------- SUB FUNCTION XMLMAP 2 -----------
     try:
         get_url = getRequests(c)
 
@@ -207,8 +203,7 @@ def xmlMapString (c): # ------------- SUB FUNCTION XMLMAP 1
 
     except Exception as error:
         print(error)
-
-def processSitemap (c):
+def processSitemap (c): # ---------- SUB FUNCTION XMLMAP 3 -----------
     sitemapText = xmlMapString(c)
     soup = BeautifulSoup(sitemapText,'lxml')
     results = []
@@ -216,8 +211,7 @@ def processSitemap (c):
     for loc in soup.find_all('loc'):
         results.append(loc.text)
     return results
-
-def get_SitemapXML (c,t,max):#------------------------------------------ SITEMAP XML ---------------------------------------------------
+def get_SitemapXML (c,t,max):#---------------------------[     SITEMAP  XML    ]--------------------
     print("Trying to request '/sitemap.xlm' wait until process complete.")
     sitemapLinks = processSitemap(c)
     lines = 0
@@ -231,14 +225,14 @@ def get_SitemapXML (c,t,max):#------------------------------------------ SITEMAP
 if __name__ == "__main__":
  # APP DESCRIP AND EPILOG
     desc = '''
-[!] legal disclaimer: 
-Use of this program to cause problems to third parties is not permited by developer, educational purposees only
-I do not assume any liability for damages caused by this program
+  [!] legal disclaimer: 
+  Use of this program to cause problems to third parties is not permited by developer, educational purposees only
+  I do not assume any liability for damages caused by this program
 
-[?] This software provides a number of features for probing computer networks, 
-including host discovery and operating-system detection. These features 
-are extensible by one simple script that provide more advanced service detection,
-vulnerability detection, and million others features. '''
+  [?] This software provides a number of features for probing computer networks, 
+  including host discovery and operating-system detection. These features 
+  are extensible by one simple script that provide more advanced service detection,
+  vulnerability detection, and million others features. '''
 
     epilog = '''Main Functions
    - Ports     Check for open ports in specific site             [-f Ports      -in www.site.com -t 1]
@@ -250,35 +244,4 @@ vulnerability detection, and million others features. '''
     '''
 
     usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
-
  # PARSER __init__ PROGRAM
-    try:
-        parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
-        
-        parser._optionals.title = " arguments"
-
-        parser.add_argument('-f',"--function",  default='None', nargs='?', help=' use this argument follow by function     [-f function]',      dest='Function')
-        parser.add_argument('-in',"--target",   default='None', nargs='?', help=' use this argument follow by content      [-in adress]',       dest='Content')
-        parser.add_argument('-t',"--timeout",   default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',dest='Timeout')
-        parser.add_argument('-max',             default=1,      nargs='?', help=' Set an maximum value                     [-m 1, default = 1]',dest='Max')
-        
-        args = parser.parse_args()
-
-        arg_func=func_dicts[str(args.Function)]
-        c = args.Content
-        t = args.Timeout
-        max = args.Max
-
-        h = datetime.now()
-
-
-        st = strftime("%H:%M:%S")
-        print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
-        
-        f = globals()[arg_func](c,t,max)
-
-        ct = strftime("%H:%M:%S")
-        print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
-
-    except Exception as error:
-        print(error,"empty function selection")
