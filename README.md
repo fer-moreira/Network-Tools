@@ -48,6 +48,6 @@ vulnerability detection, and various others features.
     - netool.py -f Scrap   -in  www.site.com
     - netool.py -f Sitemap -in  www.site.com
 
-**_netool.py - 24.10.2018  
-Author : Fernando Moreira - nandoferreira_prof@hotmail.com  
-CC0 - 2018 Creative Commons_  **
+**_netool.py - 24.10.2018_**  
+**_Author : Fernando Moreira - nandoferreira_prof@hotmail.com_**  
+**_CC0 - 2018 Creative Commons_**  
