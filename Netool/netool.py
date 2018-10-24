@@ -1,15 +1,22 @@
 try:
-    import argparse
-    from argparse import RawTextHelpFormatter
-    from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
+    import os,sys
     from datetime import datetime
     from time import time, strftime,gmtime
-
+    
+    import argparse
+    from argparse import RawTextHelpFormatter
+    
+    from socket import socket, AF_INET, SOCK_STREAM, SOCK_DGRAM, gethostbyname,getaddrinfo,gethostbyaddr,gethostbyaddr
     import requests,lxml
-    import os,sys
-
+    
     from bs4 import BeautifulSoup
     from googlesearch import search
+    
+    import urllib3
+    import urllib3.request
+    import urlparse3
+
+
 except Exception as error:
     print(error)
 
@@ -19,7 +26,10 @@ func_dicts = {
     'Robots':'get_Robots',
     'Dorks':'get_Dorks',
     'Scrap':'get_Sources',
-    'Sitemap':'get_SitemapXML'}
+    'Sitemap':'get_SitemapXML',
+    'SQLI':'check_SQLInjection',
+    'Admin':'check_AdminLogin'
+    }
 
 #---------------------------------------------------------------------------------------------------
 def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]--------------------
@@ -220,7 +230,25 @@ def get_SitemapXML (c,t,max):#---------------------------[     SITEMAP  XML    ]
         print(sitemapLinks[l])
         lines = lines+1
     print("done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
+#---------------------------------------------------------------------------------------------------
+def check_SQLInjection(c,t,max): # ----------------------[    SQL INJECTION    ]--------------------
+    url = c
 
+    print("FINISHED SCAN")
+def check_AdminLogin (c,t,max):
+    link = str(c)
+
+    wordlist = ['admin/', 'admin.php', 'administrator/', 'login.php', 'login/', 'login.html', 'admin.html', 'admin/admin.php',
+ 'admin_login.php', 'admin/account.php', 'admin/login.php', 'login/login.php', 'login/admin.php']
+
+
+    for w in wordlist:
+        r = requests.get(link+'/'+w)
+        if r.status_code == 200:
+            print(r)
+
+    
+#---------------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
  # APP DESCRIP AND EPILOG
@@ -235,13 +263,44 @@ if __name__ == "__main__":
   vulnerability detection, and million others features. '''
 
     epilog = '''Main Functions
-   - Ports     Check for open ports in specific site             [-f Ports      -in www.site.com -t 1]
-   - Links     Craw and return all href links                    [-f Links      -in www.site.com ]
-   - Robots    Acess site's/robots.txt and return content        [-f Robots     -in www.site.com]
-   - Dorks     Search for vulnerable dorks with google hacking   [-f Dorks      -in inurl='cart.php?id=1' -max 1]
-   - Scrap     Scrap site's SourceCode                           [-f Scrap      -in www.site.com]
-   - Sitemap   Scrap sitemap.xml Code and return all links       [-f Sitemap    -in www.site.com]
+   - Ports     Check for open ports in specific site                    [-f Ports      -in www.site.com -t 1]
+   - Links     Craw and return all href links                           [-f Links      -in www.site.com ]
+   - Robots    Acess site's/robots.txt and return content               [-f Robots     -in www.site.com]
+   - Dorks     Search for vulnerable dorks with google hacking          [-f Dorks      -in inurl='cart.php?id=1' -max 1]
+   - Scrap     Scrap site's SourceCode                                  [-f Scrap      -in www.site.com]
+   - Sitemap   Scrap sitemap.xml Code and return all links              [-f Sitemap    -in www.site.com]
+   - SQLI      Check if website is classic SQL and if is vulnerable     [-f SQLI       -in www.site.com/cart.php?id=1]
     '''
 
     usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
- # PARSER __init__ PROGRAM
+    
+    try:
+        parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
+        
+        parser._optionals.title = " arguments"
+
+        parser.add_argument('-f',"--function",  default='None', nargs='?', help=' use this argument follow by function     [-f function]',      dest='Function')
+        parser.add_argument('-in',"--target",   default='None', nargs='?', help=' use this argument follow by content      [-in adress]',       dest='Content')
+        parser.add_argument('-t',"--timeout",   default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',dest='Timeout')
+        parser.add_argument('-max',             default=1,      nargs='?', help=' Set an maximum value                     [-m 1, default = 1]',dest='Max')
+        
+        args = parser.parse_args()
+
+        arg_func=func_dicts[str(args.Function)]
+        c = args.Content
+        t = args.Timeout
+        max = args.Max
+
+        h = datetime.now()
+
+
+        st = strftime("%H:%M:%S")
+        print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
+        
+        f = globals()[arg_func](c,t,max)
+
+        ct = strftime("%H:%M:%S")
+        print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
+
+    except Exception as error:
+        print(error,"empty function selection")
