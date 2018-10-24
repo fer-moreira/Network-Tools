@@ -1,11 +1,14 @@
 # Netool - Network Tool
+    
+
+
 
 This software provides a number of features for probing computer networks, 
 including host discovery and operating-system detection. These features are 
 extensible by one simple script that provide more advanced service detection,
 vulnerability detection, and various others features.
 
-legal disclaimer: 
+**_legal disclaimer:_**
 
   Usage of this program to cause problems to third parties is not permited by developer, 
   educational purposees only. I do not assume any responsibilities for damages caused by this program
@@ -14,12 +17,12 @@ legal disclaimer:
   know exactly what a program will do before you run it.
   This also allows you to audit the software for errors in the code and correct them
 
-Usage:
+**Usage:**
+    
+    netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]
 
-  netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]
 
-
-arguments:
+**arguments:**
 
     -h, --help                                - show help message                        [netool.py -h]
     -f    [FUNCTION],   --function [FUNCTION] - use this argument follow by function     [-f function]
@@ -27,7 +30,7 @@ arguments:
     -t    [TIMEOUT],    --timeout [TIMEOUT]   - Set function timeout                     [-t 1, default = 1]
     -max  [MAX]                               - Set an maximum value                     [-m 1, default = 1]
 
-Main Functions
+**Main Functions**
 
     - Ports     Check for open ports in specific site           
     - Links     Craw and return all href links                   
@@ -36,7 +39,7 @@ Main Functions
     - Scrap     Scrap site's SourceCode                           
     - Sitemap   Scrap sitemap.xml Code and return all links       
    
- Real Usage examples:
+**Real Usage examples:**
  
     - netool.py -f Ports   -in  www.site.com -t 1
     - netool.py -f Links   -in  www.site.com
@@ -45,7 +48,6 @@ Main Functions
     - netool.py -f Scrap   -in  www.site.com
     - netool.py -f Sitemap -in  www.site.com
 
- 
-Create by: Fernando Ferreira
-
-For my own learning
+**_netool.py - 24.10.2018
+Author : Fernando Moreira - nandoferreira_prof@hotmail.com
+CC0 - 2018 Creative Commons_**
