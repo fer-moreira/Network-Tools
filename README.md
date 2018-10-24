@@ -6,7 +6,7 @@ extensible by one simple script that provide more advanced service detection,
 vulnerability detection, and various others features.
 
 legal disclaimer: 
-Use of this program to cause problems to third parties is not permited by developer, 
+Usage of this program to cause problems to third parties is not permited by developer, 
 educational purposees only. I do not assume any responsibilities for damages caused by this program
 
 The source code is provided with this software because we believe that users have the right to
@@ -40,6 +40,5 @@ Main Functions
  - netool.py -f Sitemap -in  www.site.com
 
  
- 
- 
- 
+ Create by: Fernando Ferreira
+ For educational self educational learning
