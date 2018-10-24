@@ -6,6 +6,7 @@ extensible by one simple script that provide more advanced service detection,
 vulnerability detection, and various others features.
 
 legal disclaimer: 
+
   Usage of this program to cause problems to third parties is not permited by developer, 
   educational purposees only. I do not assume any responsibilities for damages caused by this program
 
@@ -14,10 +15,12 @@ legal disclaimer:
   This also allows you to audit the software for errors in the code and correct them
 
 Usage:
+
   netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]
 
 
 arguments:
+
     -h, --help                                - show help message                        [netool.py -h]
     -f    [FUNCTION],   --function [FUNCTION] - use this argument follow by function     [-f function]
     -in   [CONTENT],    --target [CONTENT]    - use this argument follow by content      [-in adress]
@@ -25,6 +28,7 @@ arguments:
     -max  [MAX]                               - Set an maximum value                     [-m 1, default = 1]
 
 Main Functions
+
     - Ports     Check for open ports in specific site           
     - Links     Craw and return all href links                   
     - Robots    Acess site's/robots.txt and return content        
@@ -33,6 +37,7 @@ Main Functions
     - Sitemap   Scrap sitemap.xml Code and return all links       
    
  Real Usage examples:
+ 
     - netool.py -f Ports   -in  www.site.com -t 1
     - netool.py -f Links   -in  www.site.com
     - netool.py -f Robots  -in  www.site.com
@@ -42,4 +47,5 @@ Main Functions
 
  
 Create by: Fernando Ferreira
+
 For my own learning
