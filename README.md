@@ -32,21 +32,24 @@ vulnerability detection, and various others features.
 
 **Main Functions**
 
-    - Ports     Check for open ports in specific site           
-    - Links     Craw and return all href links                   
-    - Robots    Acess site's/robots.txt and return content        
-    - Dorks     Search for vulnerable dorks with google hacking   
-    - Scrap     Scrap site's SourceCode                           
-    - Sitemap   Scrap sitemap.xml Code and return all links       
+    - ports      Check for open ports in specific site                    [-f ports    -in www.site.com -t 1]
+    - links      Craw and return all href links                           [-f links    -in www.site.com ]
+    - robots     Acess site's/robots.txt and return content               [-f robots   -in www.site.com]
+    - search     Search for vulnerable dorks with google hacking          [-f search   -in inurl='cart.php?id=1' -max 1]
+    - scrap      Scrap site's SourceCode                                  [-f scrap    -in www.site.com]
+    - sitemap    Scrap sitemap.xml Code and return all links              [-f sitemap  -in www.site.com]   
+    - admin      Check connections in wordlist for admin url login        [-f admin    -in www.site.com]
+    
+                               - SQL INJECTION FUNCTION IS UNDER CONSTRUCTION -
    
 **Real Usage examples:**
  
-    - netool.py -f Ports   -in  www.site.com -t 1
-    - netool.py -f Links   -in  www.site.com
-    - netool.py -f Robots  -in  www.site.com
+    - netool.py -f Ports   -in  www.vulsite.test.com -t 1
+    - netool.py -f Links   -in  www.vulsite.test.com
+    - netool.py -f Robots  -in  www.vulsite.test.com
     - netool.py -f Dorks   -in [search text] [inurl='cart.php?id=12'] -max 50
-    - netool.py -f Scrap   -in  www.site.com
-    - netool.py -f Sitemap -in  www.site.com
+    - netool.py -f Scrap   -in  www.vulsite.test.com
+    - netool.py -f Sitemap -in  www.vulsite.test.com
 
 **_netool.py - 24.10.2018_**  
 **_Author : Fernando Moreira - nandoferreira_prof@hotmail.com_**  
