@@ -1,5 +1,7 @@
 admin/
 admin_login/
+admin-login
+admin-login/
 admin_login
 administrator/
 admin1/
