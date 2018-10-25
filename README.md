@@ -41,15 +41,8 @@ vulnerability detection, and various others features.
     - admin      Check connections in wordlist for admin url login        [-f admin    -in www.site.com]
     
                                - SQL INJECTION FUNCTION IS UNDER CONSTRUCTION -
+
    
-**Real Usage examples:**
- 
-    - netool.py -f Ports   -in  www.vulsite.test.com -t 1
-    - netool.py -f Links   -in  www.vulsite.test.com
-    - netool.py -f Robots  -in  www.vulsite.test.com
-    - netool.py -f Dorks   -in [search text] [inurl='cart.php?id=12'] -max 50
-    - netool.py -f Scrap   -in  www.vulsite.test.com
-    - netool.py -f Sitemap -in  www.vulsite.test.com
 
 **_netool.py - 24.10.2018_**  
 **_Author : Fernando Moreira - nandoferreira_prof@hotmail.com_**  
