@@ -1,10 +1,10 @@
-# Netool - Network Tool 
-====
+# Netool - Network Tool #
 
 [?] This software provides a number of features for probing computer networks,  
 including host discovery and operating-system detection. These features are  
 extensible by one simple script that provide more advanced service detection,  
 vulnerability detection, and various others features.
+
 ----------
 
 [!] legal disclaimer:
@@ -14,6 +14,7 @@ educational purposees only. I do not assume any responsibilities for damages cau
 The source code is provided with this software because we believe that users have the right to
 know exactly what a program will do before you run it.
 This also allows you to audit the software for errors in the code and correct them
+
 ----------
 
 **arguments:**
