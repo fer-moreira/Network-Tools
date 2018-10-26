@@ -16,20 +16,23 @@ try:
     import urllib3.request
     import urlparse3
 
+    import base64
+
 
 except Exception as error:
     print(error)
 
 func_dicts = {
-    'Ports':'get_OpenPorts',
-    'Links':"get_Links",
-    'Robots':'get_Robots',
-    'Dorks':'get_Dorks',
-    'Scrap':'get_Sources',
-    'Sitemap':'get_SitemapXML',
-    'SQLI':'check_SQLInjection',
-    'Admin':'check_AdminLogin'
+    'ports':'get_OpenPorts',
+    'links':"get_Links",
+    'robots':'get_Robots',
+    'search':'get_Dorks',
+    'scrap':'get_Sources',
+    'sitemap':'get_SitemapXML',
+    'sql':'check_SQLInjection',
+    'admin':'check_AdminLogin'
     }
+d1 = list(func_dicts)
 
 #---------------------------------------------------------------------------------------------------
 def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]--------------------
@@ -70,7 +73,7 @@ def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]
         ip = gethostbyname(_adress)
 
         startTime = time()
-        print('''Starting Port scan ({1}) \nPort scan report for ({0})'''.format(ip,datetime.now()))
+        print('''[!] Starting Port scan ({1}) \nPort scan report for ({0})'''.format(ip,datetime.now()))
 
         print("{0:<10} {1:<10} SERVICE".format("PORT","STATE"))
 
@@ -86,7 +89,7 @@ def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]
 
         elapsedTime = endTime-startTime
         finalTime = strftime("%Hh:%Mm:%Ss", gmtime(elapsedTime))
-        print("done: 1 IP address ({0}) scanned in {1}".format(ip,finalTime))
+        print("[*] done: 1 IP address ({0}) scanned in {1}".format(ip,finalTime))
     except Exception as error:
         print(error,"critical")
 def get_Links (c,t,max): # ------------------------------[       LINKS         ]--------------------
@@ -222,56 +225,100 @@ def processSitemap (c): # ---------- SUB FUNCTION XMLMAP 3 -----------
         results.append(loc.text)
     return results
 def get_SitemapXML (c,t,max):#---------------------------[     SITEMAP  XML    ]--------------------
-    print("Trying to request '/sitemap.xlm' wait until process complete.")
+    print("[!] Trying to request '/sitemap.xlm' wait until process complete.")
     sitemapLinks = processSitemap(c)
     lines = 0
     
     for l in range(len(sitemapLinks)):
         print(sitemapLinks[l])
         lines = lines+1
-    print("done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
+    print("[!] done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
 #---------------------------------------------------------------------------------------------------
 def check_SQLInjection(c,t,max): # ----------------------[    SQL INJECTION    ]--------------------
     url = c
 
     print("FINISHED SCAN")
+
+def requestSiteContent (c):
+    try:
+        get_url = requests.get(str("http://{0}".format(c)))
+        return get_url.text
+    except:pass
+    try:
+        get_url = requests.get(str("https://{0}".format(c)))
+        return get_url.text
+    except:pass
+    try:
+        get_url = requests.get("{0}".format(c))
+        return get_url.text
+    except:pass
+
 def check_AdminLogin (c,t,max):
+    print("[!] Testing login with 420 words [04m:20s to test all words]")
     link = str(c)
+    startTime = time()
 
-    wordlist = ['admin/', 'admin.php', 'administrator/', 'login.php', 'login/', 'login.html', 'admin.html', 'admin/admin.php',
- 'admin_login.php', 'admin/account.php', 'admin/login.php', 'login/login.php', 'login/admin.php']
+    try:
+        try:
+            urlGit = "raw.githubusercontent.com/zisongbr/Network-Tools/master/admin_wordlist.txt"
+            req = str(requestSiteContent(urlGit))
+            rcontent = req.split('\n')
+            
+            for i in range(len(rcontent)):
+                adLink = '{0}/{1}'.format(link,rcontent[i])
+                
+                try:adReq = requests.get('https://'+adLink)
+                except:pass
+                try:adReq = requests.get('http://'+adLink)
+                except:pass
+                try:adReq = requests.get(adLink)
+                except:pass
+                
+                if adReq.status_code == 200:
+                    print("[*] login found → [%s]" %adLink)
+                    break
 
+            endTime  = time()
+            elapsedTime = endTime-startTime
+            finalTime = strftime("%Hh:%Mm:%Ss", gmtime(elapsedTime))
+            print("[!] done!!, its take '{0}'".format(finalTime))
 
-    for w in wordlist:
-        r = requests.get(link+'/'+w)
-        if r.status_code == 200:
-            print(r)
-
-    
+        except Exception as error:
+            print(error)
+    except KeyboardInterrupt:
+        print("[!!!] [Ctrl+C] SCAN CANCELED BY spUSER")
 #---------------------------------------------------------------------------------------------------
+
 
 if __name__ == "__main__":
  # APP DESCRIP AND EPILOG
     desc = '''
-  [!] legal disclaimer: 
-  Use of this program to cause problems to third parties is not permited by developer, educational purposees only
-  I do not assume any liability for damages caused by this program
+    [?] This software provides a number of features for probing computer networks, 
+    including host discovery and operating-system detection. These features are 
+    extensible by one simple script that provide more advanced service detection,
+    vulnerability detection, and various others features.
 
-  [?] This software provides a number of features for probing computer networks, 
-  including host discovery and operating-system detection. These features 
-  are extensible by one simple script that provide more advanced service detection,
-  vulnerability detection, and million others features. '''
+    [!] legal disclaimer:
+    Usage of this program to cause problems to third parties is not permited by developer, 
+    educational purposees only. I do not assume any responsibilities for damages caused by this program
 
-    epilog = '''Main Functions
-   - Ports     Check for open ports in specific site                    [-f Ports      -in www.site.com -t 1]
-   - Links     Craw and return all href links                           [-f Links      -in www.site.com ]
-   - Robots    Acess site's/robots.txt and return content               [-f Robots     -in www.site.com]
-   - Dorks     Search for vulnerable dorks with google hacking          [-f Dorks      -in inurl='cart.php?id=1' -max 1]
-   - Scrap     Scrap site's SourceCode                                  [-f Scrap      -in www.site.com]
-   - Sitemap   Scrap sitemap.xml Code and return all links              [-f Sitemap    -in www.site.com]
-   - SQLI      Check if website is classic SQL and if is vulnerable     [-f SQLI       -in www.site.com/cart.php?id=1]
+    The source code is provided with this software because we believe that users have the right to
+    know exactly what a program will do before you run it.
+    This also allows you to audit the software for errors in the code and correct them
+
+    
     '''
 
+    epilog = ''' Main Functions
+   - {a:<10} Check for open ports in specific site                    [-f {a:<8} -in www.site.com -t 1]
+   - {b:<10} Craw and return all href links                           [-f {b:<8} -in www.site.com ]
+   - {c:<10} Acess site's/robots.txt and return content               [-f {c:<8} -in www.site.com]
+   - {d:<10} Search for vulnerable dorks with google hacking          [-f {d:<8} -in 'YOU DORK HERE' -max 1]
+   - {e:<10} Scrap site's SourceCode                                  [-f {e:<8} -in www.site.com]
+   - {f:<10} Scrap sitemap.xml Code and return all links              [-f {f:<8} -in www.site.com]
+   - {g:<10} Check if website is classic SQL and if is vulnerable     [-f {g:<8} -in www.site.com/cart.php?id=1]
+   - {h:<10} Check connections in wordlist for admin url login        [-f {h:<8} -in www.site.com]
+    '''.format(a=d1[0],b=d1[1],c=d1[2],d=d1[3],e=d1[4],f=d1[5],g=d1[6],h=d1[7])
     usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
     
     try:
@@ -303,4 +350,4 @@ if __name__ == "__main__":
         print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
 
     except Exception as error:
-        print(error,"empty function selection")
+        print(error,"empty function selection in __init__ last line")
