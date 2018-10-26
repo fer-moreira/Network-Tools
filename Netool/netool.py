@@ -288,51 +288,139 @@ def check_AdminLogin (c,t,max):
     except KeyboardInterrupt:
         print("[!!!] [Ctrl+C] SCAN CANCELED BY spUSER")
 #---------------------------------------------------------------------------------------------------
+def get_all_info(f):
+
+    dorks_url = 'raw.githubusercontent.com/zisongbr/Network-Tools/master/dorks.txt'
+    tmp_dorks = requestSiteContent(dorks_url)
+    dorkslist = list(tmp_dorks.split('\n'))
+
+
+    h_dict = {
+    #----- ADMIN --------------------
+    'admin':'''
+    Usage: 
+    -f admin -in www.site.com -t 1
+
+    Function Requeriments:
+    -in  -> site url to search for login page that is www.site.com to generate www.site.com/login.php
+    -t   -> connection timeout
+    ''',
+
+    #------ PORTS -----------------
+    'ports':'''
+    Usage:
+    -f ports -in www.site.com -t 1
+
+    Function Requeriments:
+    -in  -> site to scan for open ports
+    -t   -> timeout betwen ports
+
+    ''',
+
+    #------ SEARCH ---------------
+    'search':'''
+    Usage: 
+    -f search -in inurl:login.php -max 10
+
+    Function Requeriments:
+    -in  -> inurl dork or any other search results
+    -max -> Number of results to search for
+
+    Real dorks examples:
+    -in view_items.asp?id=
+    -max 50
+
+    [?] to see all available dorks 
+    
+    search for dork wordlist                        > '-info dork_list'
+    view Advanced Operators of google dork search   > '-info adv_operators'
+    
+    '''
+    }
+    
+    dork_advOpt = '''
+    Operator:      Purpose:
+    intitle:       Search page title
+    allintitle:    Search page title
+    inurl:         Search URL
+    allinurl:      Search URL
+    filetype:      Search specific files
+    allintext:     Search text of page only
+    site:          Search specific site
+    link:          Search for links to pages
+    inanchor:      Search link anchor text
+    numrange:      Locate number
+    daterange:     Search in date range
+    author:        Group author search
+    group:         Group name search
+    insubject:     Group subject search
+    msgid:         Group msgid search"
+    '''
+
+    cmd_info = ["dork_list","adv_operators"]
+
+    if f == cmd_info[1]:
+       print(dork_advOpt) 
+    if f == cmd_info[0]:
+        for line in range(len(dorkslist)):
+            print(dorkslist[line])
+    if f not in cmd_info:
+        print(h_dict[str(f)])
+
+#---------------------------------------------------------------------------------------------------
 
 
 if __name__ == "__main__":
  # APP DESCRIP AND EPILOG
     desc = '''
-    [?] This software provides a number of features for probing computer networks, 
-    including host discovery and operating-system detection. These features are 
-    extensible by one simple script that provide more advanced service detection,
-    vulnerability detection, and various others features.
+ [?] This software provides a number of features for probing computer networks, 
+ including host discovery and operating-system detection. These features are 
+ extensible by one simple script that provide more advanced service detection,
+ vulnerability detection, and various others features.
 
-    [!] legal disclaimer:
-    Usage of this program to cause problems to third parties is not permited by developer, 
-    educational purposees only. I do not assume any responsibilities for damages caused by this program
+ [!] legal disclaimer:
+ Usage of this program to cause problems to third parties is not permited by developer, 
+ educational purposees only. I do not assume any responsibilities for damages caused by this program
 
-    The source code is provided with this software because we believe that users have the right to
-    know exactly what a program will do before you run it.
-    This also allows you to audit the software for errors in the code and correct them
-
-    
+ The source code is provided with this software because we believe that users have the right to
+ know exactly what a program will do before you run it.
+ This also allows you to audit the software for errors in the code and correct them
     '''
 
     epilog = ''' Main Functions
-   - {a:<10} Check for open ports in specific site                    [-f {a:<8} -in www.site.com -t 1]
-   - {b:<10} Craw and return all href links                           [-f {b:<8} -in www.site.com ]
-   - {c:<10} Acess site's/robots.txt and return content               [-f {c:<8} -in www.site.com]
-   - {d:<10} Search for vulnerable dorks with google hacking          [-f {d:<8} -in 'YOU DORK HERE' -max 1]
-   - {e:<10} Scrap site's SourceCode                                  [-f {e:<8} -in www.site.com]
-   - {f:<10} Scrap sitemap.xml Code and return all links              [-f {f:<8} -in www.site.com]
-   - {g:<10} Check if website is classic SQL and if is vulnerable     [-f {g:<8} -in www.site.com/cart.php?id=1]
-   - {h:<10} Check connections in wordlist for admin url login        [-f {h:<8} -in www.site.com]
+  - {a:<10} Check for open ports in specific site                    [-f {a:<8} -in www.site.com -t 1]
+  - {b:<10} Craw and return all href links                           [-f {b:<8} -in www.site.com ]
+  - {c:<10} Acess site's/robots.txt and return content               [-f {c:<8} -in www.site.com]
+  - {d:<10} Search for vulnerable dorks with google hacking          [-f {d:<8} -in 'YOU DORK HERE' -max 1]
+  - {e:<10} Scrap site's SourceCode                                  [-f {e:<8} -in www.site.com]
+  - {f:<10} Scrap sitemap.xml Code and return all links              [-f {f:<8} -in www.site.com]
+  - {g:<10} Check if website is classic SQL and if is vulnerable     [-f {g:<8} -in www.site.com/cart.php?id=1]
+  - {h:<10} Check connections in wordlist for admin url login        [-f {h:<8} -in www.site.com]
+
+ [?] To see all documentation about an function. Use '-info function' or '--get_info=function'
+ [?] If you need to put 'SPACES' in function content use -f "function" -in "content"
+
+ example: 
+  -f search -in "FOO BAR" or 
+  -f search -in="FOO BAR"
+
     '''.format(a=d1[0],b=d1[1],c=d1[2],d=d1[3],e=d1[4],f=d1[5],g=d1[6],h=d1[7])
     usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
     
-    try:
-        parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
-        
-        parser._optionals.title = " arguments"
+    parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
+    
+    parser._optionals.title = " arguments"
 
-        parser.add_argument('-f',"--function",  default='None', nargs='?', help=' use this argument follow by function     [-f function]',      dest='Function')
-        parser.add_argument('-in',"--target",   default='None', nargs='?', help=' use this argument follow by content      [-in adress]',       dest='Content')
-        parser.add_argument('-t',"--timeout",   default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',dest='Timeout')
-        parser.add_argument('-max',             default=1,      nargs='?', help=' Set an maximum value                     [-m 1, default = 1]',dest='Max')
-        
-        args = parser.parse_args()
+    parser.add_argument('-info','--get_info',default='None', nargs='?', help=' get more info about one specific module  [-info funcion',        dest='Info') 
+    parser.add_argument('-f',"--function",   default='None', nargs='?', help=' use this argument follow by function     [-f function]',         dest='Function')
+    parser.add_argument('-in',"--target",    default='None', nargs='?', help=' use this argument follow by content      [-in adress]',          dest='Content')
+    parser.add_argument('-t',"--timeout",    default=1,      nargs='?', help=' Set function timeout                     [-t 1, default = 1]',   dest='Timeout')
+    parser.add_argument('-max',"--maximum",  default=10,     nargs='?', help=' Set an maximum value                     [-max 1, default = 10]',dest='Max')
+    
+# try:
+    args = parser.parse_args()
 
+    if args.Info == 'None':        
         arg_func=func_dicts[str(args.Function)]
         c = args.Content
         t = args.Timeout
@@ -342,12 +430,27 @@ if __name__ == "__main__":
 
 
         st = strftime("%H:%M:%S")
+    
+        # os.system('cls')
+
         print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
         
         f = globals()[arg_func](c,t,max)
-
+        
         ct = strftime("%H:%M:%S")
         print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
+    
+    else:
+        sel_help_func = args.Info
+        st = strftime("%H:%M:%S")
 
-    except Exception as error:
-        print(error,"empty function selection in __init__ last line")
+        # os.system('cls')
+
+        print("─"*100,"\n[{0}] [START] Start 'info' in '{f}'".format(st,f=sel_help_func))
+        
+        get_all_info(sel_help_func)
+
+        ct = strftime("%H:%M:%S")
+        print("[{0}] [COMPLETED] Completed 'info' in '{f}' \n".format(ct,f=sel_help_func),"─"*100)
+# except Exception as error:
+#     print(error,'[!!] you need a content first . ')
