@@ -36,18 +36,21 @@ This also allows you to audit the software for errors in the code and correct th
     - sitemap    Scrap sitemap.xml Code and return all links              [-f sitemap  -in www.site.com]  
     - sql        Check if website is classic SQL and if is vulnerable     [-f sql      -in www.site.com/cart.php?id=1]  
     - admin      Check connections in wordlist for admin url login        [-f admin    -in www.site.com]  
-    [?] To see all documentation about an function. Use '-info function' or '--get_info=function'  
+    
+    [?] To see all documentation about an function. Use '-info function' or '--get_info=function' 
+     
     [?] If you need to put 'SPACES' in function content use -f "function" -in "content"
-
-**If you want a function content with spaces of breaklines use ' " ' to do:**
-
+    [?] Example:
+    
     -f search -in "FOO BAR" or
     -f search -in="FOO BAR"
     -f scrap -in "www.vulnsite.com/hackthis,php?id=xxx"
     
-**Dorks simple usage:**
+    Dorks example:
     -f search -in "inurl:admin filetype:.php" or
     -f search -in="inurl:creditcard_db filetype:.txt OR filetype:.xlsx" 
+    
+
     
 ----------
 **_netool.py - 24.10.2018_**  
