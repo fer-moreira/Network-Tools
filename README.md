@@ -39,10 +39,12 @@ This also allows you to audit the software for errors in the code and correct th
     [?] To see all documentation about an function. Use '-info function' or '--get_info=function'  
     [?] If you need to put 'SPACES' in function content use -f "function" -in "content"
 
-**Simple usage:**
+**If you want a function content with spaces of breaklines use ' " ' to do:**
 
     -f search -in "FOO BAR" or
     -f search -in="FOO BAR"
+    -f scrap -in "www.vulnsite.com/hackthis,php?id=xxx"
+    
 ----------
 **_netool.py - 24.10.2018_**  
 **_Author : Fernando Moreira - nandoferreira_prof@hotmail.com_**  
