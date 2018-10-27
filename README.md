@@ -45,6 +45,10 @@ This also allows you to audit the software for errors in the code and correct th
     -f search -in="FOO BAR"
     -f scrap -in "www.vulnsite.com/hackthis,php?id=xxx"
     
+**Dorks simple usage:**
+    -f search -in "inurl:admin filetype:.php" or
+    -f search -in="inurl:creditcard_db filetype:.txt OR filetype:.xlsx" 
+    
 ----------
 **_netool.py - 24.10.2018_**  
 **_Author : Fernando Moreira - nandoferreira_prof@hotmail.com_**  
