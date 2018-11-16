@@ -18,9 +18,9 @@ try:
 
     import base64
 
-    import pythonwhois
+    from ipwhois import IPWhois
+    import warnings
 
-   
 
     func_dicts = {
         'ports':'get_OpenPorts',
@@ -31,11 +31,11 @@ try:
         'sitemap':'get_SitemapXML',
         'sql':'check_SQLInjection',
         'admin':'check_AdminLogin',
-        'domain':'domain_lookup'
+        'ipLookup':'ip_Lookup'
         }
     d1 = list(func_dicts)
 
-    #---------------------------------------------------------------------------------------------------
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
     def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]--------------------
         port_dict = {
             20:'FTP (default data channel)',    21:'FTP (control channel)',                         23:'Telnet',
@@ -93,6 +93,36 @@ try:
             print("[*] done: 1 IP address ({0}) scanned in {1}".format(ip,finalTime))
         except Exception as error:
             print(error,"critical")
+    def ip_Lookup (c,t,max): # ------------------------------[     IP LOOKUP       ]--------------------
+        with warnings.catch_warnings():
+            warnings.filterwarnings("ignore",category=UserWarning)
+            ip = str(c)
+            try: add = gethostbyname(ip.split("www.")[1])
+            except:pass
+            try: add = gethostbyname("https://%s"%ip)
+            except:pass
+            try: add = gethostbyname("www.%s"%ip)
+            except:pass
+            
+            obj = IPWhois(add,5)
+            res = obj.lookup_whois()
+
+            print("\n")
+            print("IP Lookup results for '{0}' [{1}]".format(ip,add))
+            for els in res:                                                 #GET OBJ RESULT
+                val = "{0}".format(els)
+                res_els = res[val]
+                if res_els is not None:                                     #IF ACTUAL OBJECT HAVE CONTENT
+                    if val == 'nets':
+                        nets_D = res_els[0]
+                        for k in nets_D:                                    #GET KEYS OF DICTS TO VIEW CONTENT
+                            content = nets_D.get(k)
+                            result = "{0:<20} {1}".format(k,content)
+                            print(result)                                   #RESULTS OF NETS INFORMATIONS
+                    else:                                                   #GET CONTENT IF IS NOT DICT
+                        result = "{0:<20} {1}".format(els,res_els)
+                        print(result)                                       #RESULTS OF COMMOM INFORMATIONS
+            print("\n")
     def get_Links (c,t,max): # ------------------------------[       LINKS         ]--------------------
         _adress = str(c)
         url = str(_adress)
@@ -154,9 +184,9 @@ try:
 
 
         print('''\nRobots open with following protocols
-    http://{site}       → {0}
-    https://{site}      → {1}
-    {site}              → {2}'''.format(http,https,wtp,site=adress))
+     http://{site}       → {0}
+     https://{site}      → {1}
+     {site}              → {2}'''.format(http,https,wtp,site=adress))
     def get_Dorks (c,t,max): # ------------------------------[       DORKS         ]--------------------
         text = str(c)
         print("Searching {m} results for '{0}'.. \nmaybe this take a bit longer to complete".format(text,m=max),"alert")
@@ -192,7 +222,7 @@ try:
         
         data = r.text
         print("\n\n{0}\n\n".format(data))
-    #---------------------------------------------------------------------------------------------------
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
     def getRequests (c):    # ---------- SUB FUNCTION XMLMAP 1 -----------
         try:
             get_url = requests.get(str("http://{0}/sitemap.xml".format(c)))
@@ -234,7 +264,7 @@ try:
             print(sitemapLinks[l])
             lines = lines+1
         print("[!] done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
-    #---------------------------------------------------------------------------------------------------
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
     def check_SQLInjection(c,t,max): # ----------------------[    SQL INJECTION    ]--------------------
         url = c
 
@@ -252,8 +282,8 @@ try:
             get_url = requests.get("{0}".format(c))
             return get_url.text
         except:pass
-    #---------------------------------------------------------------------------------------------------
-    def check_AdminLogin (c,t,max):
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
+    def check_AdminLogin (c,t,max):  # ----------------------[    ADMIN BRUTEFORCE ]--------------------
         print("[!] Testing login with 420 words [04m:20s to test all words]")
         link = str(c)
         startTime = time()
@@ -287,18 +317,14 @@ try:
                 print(error)
         except KeyboardInterrupt:
             print("[!!!] [Ctrl+C] SCAN CANCELED BY spUSER")
-    #---------------------------------------------------------------------------------------------------
-    def domain_lookup (c,t,max):
-        domain = str(c)
-        details = pythonwhois.get_whois(domain)
-        print(details)
-
+    
+    
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
     def get_all_info(f):
         dorks_url = 'raw.githubusercontent.com/zisongbr/Network-Tools/master/dorks.txt'
         tmp_dorks = requestSiteContent(dorks_url)
         dorkslist = list(tmp_dorks.split('\n'))
-
-    # ------ DETAILED HELP PANEL '-info' ---------
+    # ------ [DETAILED HELP PANEL '-info'] ---------
         h_dict = {
         #----- ADMIN --------------------
         'admin':'''
@@ -387,8 +413,8 @@ try:
             print()
         if f not in cmd_info:
             print(h_dict[str(f)])
-    #---------------------------------------------------------------------------------------------------
-
+  
+    #────────────────────────────────────────────────────────────────────────────────────────────────────
 
     if __name__ == "__main__":
     # APP DESCRIP AND EPILOG
@@ -416,6 +442,7 @@ try:
     - {f:<10} Scrap sitemap.xml Code and return all links              [-f {f:<8} -in www.site.com]
     - {g:<10} Check if website is classic SQL and if is vulnerable     [-f {g:<8} -in www.site.com/cart.php?id=1]
     - {h:<10} Check connections in wordlist for admin url login        [-f {h:<8} -in www.site.com]
+    - {i:<10} Run a IP Lookup and return all host information          [-f {i:<8} -in www.site.com]
 
     [?] To see all documentation about an function. Use '-info function' or '--get_info=function'
     [?] If you need to put 'SPACES' in function content use -f "function" -in "content"
@@ -424,7 +451,7 @@ try:
     -f search -in "FOO BAR" or 
     -f search -in="FOO BAR"
 
-        '''.format(a=d1[0],b=d1[1],c=d1[2],d=d1[3],e=d1[4],f=d1[5],g=d1[6],h=d1[7])
+        '''.format(a=d1[0],b=d1[1],c=d1[2],d=d1[3],e=d1[4],f=d1[5],g=d1[6],h=d1[7],i=d1[8])
         usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
         
         parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
@@ -445,34 +472,23 @@ try:
             c = args.Content
             t = args.Timeout
             max = args.Max
-
             h = datetime.now()
-
-
             st = strftime("%H:%M:%S")
-        
-            # os.system('cls')
-
             print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
-            
             f = globals()[arg_func](c,t,max)
-            
             ct = strftime("%H:%M:%S")
             print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
-        
+
         else:
             sel_help_func = args.Info
             st = strftime("%H:%M:%S")
-
-            # os.system('cls')
-
             print("─"*100,"\n[{0}] [START] Start 'info' in '{f}'".format(st,f=sel_help_func))
-            
             get_all_info(sel_help_func)
-
             ct = strftime("%H:%M:%S")
             print("[{0}] [COMPLETED] Completed 'info' in '{f}' \n".format(ct,f=sel_help_func),"─"*100)
+
     except Exception as error:
         print(error,'[!!] you need a content first . ')
+
 except KeyboardInterrupt:
     print('''\n[!!!]          [Ctrl + C > KEYBOARD INTERRUPT]         [!!!]''')
