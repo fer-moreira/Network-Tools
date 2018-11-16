@@ -1,4 +1,5 @@
 try:
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     import os,sys
     from datetime import datetime
     from time import time, strftime,gmtime
@@ -34,8 +35,7 @@ try:
         'ipLookup':'ip_Lookup'
         }
     d1 = list(func_dicts)
-
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     def get_OpenPorts(c,t,m): # -----------------------------[     OPEN PORTS      ]--------------------
         port_dict = {
             20:'FTP (default data channel)',    21:'FTP (control channel)',                         23:'Telnet',
@@ -66,7 +66,6 @@ try:
         ports_range  = list(port_dict.keys())    
 
         try:
-
             _adress = str(c)
             _timeout = int(t)
             _range = ports_range
@@ -181,8 +180,6 @@ try:
         except Exception as error:
             print(error)
 
-
-
         print('''\nRobots open with following protocols
      http://{site}       → {0}
      https://{site}      → {1}
@@ -222,7 +219,7 @@ try:
         
         data = r.text
         print("\n\n{0}\n\n".format(data))
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     def getRequests (c):    # ---------- SUB FUNCTION XMLMAP 1 -----------
         try:
             get_url = requests.get(str("http://{0}/sitemap.xml".format(c)))
@@ -264,10 +261,9 @@ try:
             print(sitemapLinks[l])
             lines = lines+1
         print("[!] done {0} links found in '{1}/sitemap.xml'".format(lines,c),"\n")
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     def check_SQLInjection(c,t,max): # ----------------------[    SQL INJECTION    ]--------------------
         url = c
-
         print("FINISHED SCAN")
     def requestSiteContent (c):
         try:
@@ -282,7 +278,6 @@ try:
             get_url = requests.get("{0}".format(c))
             return get_url.text
         except:pass
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
     def check_AdminLogin (c,t,max):  # ----------------------[    ADMIN BRUTEFORCE ]--------------------
         print("[!] Testing login with 420 words [04m:20s to test all words]")
         link = str(c)
@@ -305,8 +300,10 @@ try:
                     except:pass
                     
                     if adReq.status_code == 200:
-                        print("[*] login found → [%s]" %adLink)
+                        print("[*] login found → [%s] \n" %adLink)
                         break
+                    else:
+                        print(adLink)
 
                 endTime  = time()
                 elapsedTime = endTime-startTime
@@ -317,16 +314,14 @@ try:
                 print(error)
         except KeyboardInterrupt:
             print("[!!!] [Ctrl+C] SCAN CANCELED BY spUSER")
-    
-    
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     def get_all_info(f):
         dorks_url = 'raw.githubusercontent.com/zisongbr/Network-Tools/master/dorks.txt'
         tmp_dorks = requestSiteContent(dorks_url)
         dorkslist = list(tmp_dorks.split('\n'))
     # ------ [DETAILED HELP PANEL '-info'] ---------
         h_dict = {
-        #----- ADMIN --------------------
+    #----- ADMIN --------------------
         'admin':'''
         Usage: 
         -f admin -in www.site.com -t 1
@@ -335,8 +330,7 @@ try:
         -in  -> site url to search for login page that is www.site.com to generate www.site.com/login.php
         -t   -> connection timeout
         ''',
-
-        #------ PORTS -----------------
+    #------ PORTS -----------------
         'ports':'''
         Usage:
         -f ports -in www.site.com -t 1
@@ -346,8 +340,7 @@ try:
         -t   -> timeout betwen ports
 
         ''',
-
-        #------ SEARCH ---------------
+    #------ SEARCH ---------------
         'search':'''
         Usage: 
         -f search -in inurl:login.php -max 10
@@ -413,9 +406,7 @@ try:
             print()
         if f not in cmd_info:
             print(h_dict[str(f)])
-  
-    #────────────────────────────────────────────────────────────────────────────────────────────────────
-
+#────────────────────────────────────────────────────────────────────────────────────────────────────────────
     if __name__ == "__main__":
     # APP DESCRIP AND EPILOG
         desc = '''
@@ -469,13 +460,17 @@ try:
 
         if args.Info == 'None':        
             arg_func=func_dicts[str(args.Function)]
+            
             c = args.Content
             t = args.Timeout
             max = args.Max
+            
             h = datetime.now()
             st = strftime("%H:%M:%S")
             print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
+            
             f = globals()[arg_func](c,t,max)
+            
             ct = strftime("%H:%M:%S")
             print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
 
@@ -483,7 +478,9 @@ try:
             sel_help_func = args.Info
             st = strftime("%H:%M:%S")
             print("─"*100,"\n[{0}] [START] Start 'info' in '{f}'".format(st,f=sel_help_func))
+
             get_all_info(sel_help_func)
+            
             ct = strftime("%H:%M:%S")
             print("[{0}] [COMPLETED] Completed 'info' in '{f}' \n".format(ct,f=sel_help_func),"─"*100)
 
