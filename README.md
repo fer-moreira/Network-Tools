@@ -35,7 +35,8 @@ This also allows you to audit the software for errors in the code and correct th
     - scrap      Scrap site's SourceCode                                  [-f scrap    -in www.site.com]  
     - sitemap    Scrap sitemap.xml Code and return all links              [-f sitemap  -in www.site.com]  
     - sql        Check if website is classic SQL and if is vulnerable     [-f sql      -in www.site.com/cart.php?id=1]  
-    - admin      Check connections in wordlist for admin url login        [-f admin    -in www.site.com]  
+    - admin      Check connections in wordlist for admin url login        [-f admin    -in www.site.com]
+    - ipLookup   Run a IP Lookup and return all host information          [-f ipLookup -in www.site.com]
     
     [?] To see all documentation about an function. Use '-info function' or '--get_info=function' 
      
