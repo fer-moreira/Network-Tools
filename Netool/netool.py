@@ -93,12 +93,14 @@ try:
         except Exception as error:
             print(error,"critical")
     def host_by_name (address):
-        try: return gethostbyname(ip.split("www.")[1])
+        try: return gethostbyname(address.split("www.")[1])
         except:pass
         try: return gethostbyname("https://%s"%address)
         except:pass
         try: return gethostbyname("www.%s"%address)
         except:pass
+        try: return gethostbyname(address)
+        except:passs
         try: 
             return gethostbyname("http://www.%s"%address)
         except Exception as error:
