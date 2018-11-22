@@ -51,12 +51,12 @@ try:
             261:'CheckP Firewall Management',   264:'Checkpoint Firewall Topology Download',        265:'Checkpoint VPN-1 Public Key Transfer Protocol',
             270:'Microsoft Operations Manager ',389:'LDAP (Lightweight Directory Access Protocol)', 443:'HTTP over SSL',                
             444:'SNPP(Network Paging Protocol)',500:'IKE (IPSEC Internet Key Exchange)',            520:'Routing Information Protocol', 
-            524:'Netware Core Protocol',        543:'Kerberos Login',               
-            544:'Kerberos Shell',               563:'NNTPS (Secure NNTP)',                          599:'HTTP RPC Endpoint ', 
-            1080:'SOCKS Proxy',                 1081:'SOCKS Proxy alternate',                       1214:'Kazaa Network', 
-            1241:'Nessus',                      1433:'Microsoft SQL Server',                        1434:'Microsoft SQL MonitorService',
-            1494:'Citrix',                      1498:'Sybase',                                      1521:'Oracle TNS Listener', 
-            1723:'Point-to-Point Tunneling Protocol (PPTP)',                                        1745:'Winsock-proxy', 
+            524:'Netware Core Protocol',        543:'Kerberos Login',                               544:'Kerberos Shell',               
+            563:'NNTPS (Secure NNTP)',          599:'HTTP RPC Endpoint ',                           1080:'SOCKS Proxy',                 
+            1081:'SOCKS Proxy alternate',       1214:'Kazaa Network',                               1241:'Nessus',                      
+            1433:'Microsoft SQL Server',        1434:'Microsoft SQL MonitorService',                1494:'Citrix',                      
+            1498:'Sybase',                      1521:'Oracle TNS Listener',                         1723:'Point-to-Point Tunneling Protocol (PPTP)',                                        
+            1745:'Winsock-proxy', 
             2000:'Remotely Anywhere',           2001:'Cisco device management, Remotely Anywhere',  2301:'Compaq Insight Manager', 
             2381:'Secure Cpq Insight Manager',  3389:'Terminal Services',                           4001:'Cisco device management', 
             5631:'PC Anywhere'
@@ -100,7 +100,7 @@ try:
         try: return gethostbyname("www.%s"%address)
         except:pass
         try: return gethostbyname(address)
-        except:passs
+        except:pass
         try: 
             return gethostbyname("http://www.%s"%address)
         except Exception as error:
