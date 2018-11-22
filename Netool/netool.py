@@ -93,7 +93,7 @@ try:
         except Exception as error:
             print(error,"critical")
     def host_by_name (address):
-        try: return gethostbyname(address.split("www.")[1])
+        try: return gethostbyname(ip.split("www.")[1])
         except:pass
         try: return gethostbyname("https://%s"%address)
         except:pass
@@ -417,22 +417,31 @@ try:
 #────────────────────────────────────────────────────────────────────────────────────────────────────────────
     if __name__ == "__main__":
     # APP DESCRIP AND EPILOG
+        banner_a = '''
+   _   _          _                     _ 
+  | \ | |        | |                   | |
+  |  \| |   ___  | |_    ___     ___   | |
+  | . ` |  / _ \ | __|  / _ \   / _ \  | |
+  | |\  | |  __/ | |_  | (_) | | (_) | | |
+  |_| \_|  \___|  \__|  \___/   \___/  |_|
+  by: Fernando Ferreira Moreira
+  '''
+
         desc = '''
-    [?] This software provides a number of features for probing computer networks, 
-    including host discovery and operating-system detection. These features are 
-    extensible by one simple script that provide more advanced service detection,
-    vulnerability detection, and various others features.
+  [?] This software provides a number of features for probing computer networks, 
+  including host discovery and operating-system detection. These features are 
+  extensible by one simple script that provide more advanced service detection,
+  vulnerability detection, and various others features.
 
-    [!] legal disclaimer:
-    Usage of this program to cause problems to third parties is not permited by developer, 
-    educational purposees only. I do not assume any responsibilities for damages caused by this program
+  [!] legal disclaimer:
+  Usage of this program to cause problems to third parties is not permited by developer, 
+  educational purposees only. I do not assume any responsibilities for damages caused by this program
 
-    The source code is provided with this software because we believe that users have the right to
-    know exactly what a program will do before you run it.
-    This also allows you to audit the software for errors in the code and correct them
-        '''
+  The source code is provided with this software because we believe that users have the right to
+  know exactly what a program will do before you run it.
+  This also allows you to audit the software for errors in the code and correct them'''
 
-        epilog = ''' Main Functions
+        epilog = ''' Main Functions:
     - {a:<10} Check for open ports in specific site                    [-f {a:<8} -in www.site.com -t 1]
     - {b:<10} Craw and return all href links                           [-f {b:<8} -in www.site.com ]
     - {c:<10} Acess site's/robots.txt and return content               [-f {c:<8} -in www.site.com]
@@ -453,9 +462,9 @@ try:
         '''.format(a=d1[0],b=d1[1],c=d1[2],d=d1[3],e=d1[4],f=d1[5],g=d1[6],h=d1[7],i=d1[8])
         usage= "netool.py [-h] [-f FUNCTION] [-in ADRESS] [-t TIMEOUT] [-max MAX OPERATIONS]"
         
-        parser = argparse.ArgumentParser(description=desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
+        parser = argparse.ArgumentParser(description=banner_a + desc,epilog=epilog,usage=usage,formatter_class=RawTextHelpFormatter)
         
-        parser._optionals.title = " arguments"
+        parser._optionals.title = " Arguments usage"
 
         parser.add_argument('-info','--get_info',default='None', nargs='?', help=' get more info about one specific module  [-info funcion',        dest='Info') 
         parser.add_argument('-f',"--function",   default='None', nargs='?', help=' use this argument follow by function     [-f function]',         dest='Function')
@@ -464,6 +473,7 @@ try:
         parser.add_argument('-max',"--maximum",  default=10,     nargs='?', help=' Set an maximum value                     [-max 1, default = 10]',dest='Max')
         
     try:
+        line_arg = "="*100
         args = parser.parse_args()
 
         if args.Info == 'None':        
@@ -475,22 +485,22 @@ try:
             
             h = datetime.now()
             st = strftime("%H:%M:%S")
-            print("─"*100,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
+            print(line_arg,"\n[{0}] [START] Start '{f}' service at '{ctt}'".format(st,f=args.Function,ctt=c))
             
             f = globals()[arg_func](c,t,max)
             
             ct = strftime("%H:%M:%S")
-            print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),"─"*100)
+            print("[{0}] [COMPLETED] Completed '{f}' service in '{ctt}'\n".format(ct,f=args.Function,ctt=c),line_arg)
 
         else:
             sel_help_func = args.Info
             st = strftime("%H:%M:%S")
-            print("─"*100,"\n[{0}] [START] Start 'info' in '{f}'".format(st,f=sel_help_func))
+            print(line_arg,"\n[{0}] [START] Start 'info' in '{f}'".format(st,f=sel_help_func))
 
             get_all_info(sel_help_func)
             
             ct = strftime("%H:%M:%S")
-            print("[{0}] [COMPLETED] Completed 'info' in '{f}' \n".format(ct,f=sel_help_func),"─"*100)
+            print("[{0}] [COMPLETED] Completed 'info' in '{f}' \n".format(ct,f=sel_help_func),line_arg)
 
     except Exception as error:
         print(error,'[!!] you need a content first . ')
