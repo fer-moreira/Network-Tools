@@ -1,0 +1,17 @@
+{
+  "name": "Network-Tools",
+  "version": "v1.0",
+  "description": "",
+  "main": "Connector.py",
+  "scripts": {
+    "start": "python netool.py"
+  },
+  "dependencies": {
+    "urllib3": "^1.23",
+    "urlparse3":"^1.1",
+    "bs4":"^0.0.1",
+    "ipwhois":"^1.0.0",
+    "google":"^2.0.1",
+    "beautifulsoup4":"^4.6.3"
+  }
+}
