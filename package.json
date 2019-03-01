@@ -12,6 +12,9 @@
     "bs4":"^0.0.1",
     "ipwhois":"^1.0.0",
     "google":"^2.0.1",
-    "beautifulsoup4":"^4.6.3"
+    "beautifulsoup4":"^4.6.3",
+    "lxml":"^4.2.5",
+    "request":"^2018.11.20",
+    "requests" : "^2.19.1"
   }
 }
